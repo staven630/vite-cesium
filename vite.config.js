@@ -44,10 +44,10 @@ export default (config) => {
 
   const IS_PROD = ["prod", "production"].includes(mode);
 
-  let base = process.env.CESIUM_BASE_URL;
+  let cesiumBaseUrl = process.env.CESIUM_BASE_URL;
 
-  if (!base) {
-    base = IS_PROD ? "./" : `http://${server.host}:${server.port}`;
+  if (!cesiumBaseUrl) {
+    cesiumBaseUrl = IS_PROD ? "./" : `http://${server.host}:${server.port}`;
   }
 
   const resolve = {
@@ -71,7 +71,7 @@ export default (config) => {
   ];
 
   const define = {
-    CESIUM_BASE_URL: JSON.stringify(`${base}/${CESIUM_PATH}`),
+    CESIUM_BASE_URL: JSON.stringify(`${cesiumBaseUrl}/${CESIUM_PATH}`),
   };
 
   if (!fse.existsSync(`public/${CESIUM_PATH}`)) {
@@ -98,7 +98,6 @@ export default (config) => {
   }
 
   return {
-    base,
     define,
     resolve,
     plugins,
