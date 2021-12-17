@@ -15,7 +15,6 @@ onMounted(() => {
 
   Cesium.Ion.defaultAccessToken = import.meta.env.VITE_CESIUM_ACCESS_TOKEN;
 
-  console.log(import.meta.env.VITE_CESIUM_ACCESS_TOKEN);
   // 启用光照
   viewer.scene.globe.enableLighting = true;
 

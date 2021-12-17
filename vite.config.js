@@ -44,7 +44,7 @@ export default (config) => {
 
   const IS_PROD = ["prod", "production"].includes(mode);
 
-  let base = process.env.BASE_URL;
+  let base = process.env.CESIUM_BASE_URL;
 
   if (!base) {
     base = IS_PROD ? "./" : `http://${server.host}:${server.port}`;
