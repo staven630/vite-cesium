@@ -1,6 +1,5 @@
 import { loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
-import copy from "rollup-plugin-copy";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import vueSetupExtend from "vite-plugin-vue-setup-extend";
 import commonjsExternals from "vite-plugin-commonjs-externals";
@@ -22,16 +21,18 @@ const server = {
   port: "3000",
 };
 
-const cesiumCopy = () => {
-  const targets = ["Workers", "Assets", "ThirdParty", "Widgets"].map((item) => {
-    return {
-      src: `./node_modules/cesium/Source/${item}/**/*`,
-      dest: `public/${CESIUM_PATH}/${item}`,
-    };
+if (!fse.existsSync(`public/cesium`)) {
+  ["Workers", "Assets", "ThirdParty", "Widgets"].forEach((item) => {
+    fse.copySync(
+      `./node_modules/cesium/Source/${item}`,
+      `public/${CESIUM_PATH}/${item}`
+    );
   });
-
-  return copy({ targets });
-};
+  fse.copySync(
+    `./node_modules/cesium/Build/Cesium/Cesium.js`,
+    `public/${CESIUM_PATH}/Cesium.js`
+  );
+}
 
 // https://vitejs.dev/config/
 export default (config) => {
@@ -74,10 +75,6 @@ export default (config) => {
     CESIUM_BASE_URL: JSON.stringify(`${cesiumBaseUrl}/${CESIUM_PATH}`),
   };
 
-  if (!fse.existsSync(`public/${CESIUM_PATH}`)) {
-    plugins.push(cesiumCopy());
-  }
-
   if (IS_PROD) {
     plugins = [
       ...plugins,
@@ -86,10 +83,8 @@ export default (config) => {
           {
             name: "cesium",
             var: "Cesium",
-            path: "https://cdn.bootcdn.net/ajax/libs/cesium/1.83.0/Cesium.js",
-            css: "https://cdn.bootcdn.net/ajax/libs/cesium/1.83.0/Widgets/widgets.min.css",
-            // path: `https://cesium.com/downloads/cesiumjs/releases/1.88/Build/Cesium/Cesium.js`,
-            // css: "https://cesium.com/downloads/cesiumjs/releases/1.88/Build/Cesium/Widgets/widgets.css",
+            path: "./cesium/Cesium.js",
+            css: "./cesium/Widgets/widgets.min.css",
           },
         ],
       }),
