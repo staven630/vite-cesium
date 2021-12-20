@@ -6,8 +6,8 @@ import commonjsExternals from "vite-plugin-commonjs-externals";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import ElementPlus from "unplugin-element-plus/vite";
-import importToCDN from "vite-plugin-cdn-import";
 import { visualizer } from "rollup-plugin-visualizer";
+import externalGlobals from "rollup-plugin-external-globals";
 
 import * as path from "path";
 import fse from "fs-extra";
@@ -92,10 +92,22 @@ export default (config) => {
     ];
   }
 
+  const build = {
+    rollupOptions: {
+      external: ["cesium"],
+      plugins: [
+        externalGlobals({
+          cesium: "Cesium",
+        }),
+      ],
+    },
+  };
+
   return {
     define,
     resolve,
     plugins,
     server,
+    build,
   };
 };
