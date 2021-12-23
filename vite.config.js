@@ -76,20 +76,7 @@ export default (config) => {
   };
 
   if (IS_PROD) {
-    plugins = [
-      ...plugins,
-      importToCDN({
-        modules: [
-          {
-            name: "cesium",
-            var: "Cesium",
-            path: "./cesium/Cesium.js",
-            css: "./cesium/Widgets/widgets.min.css",
-          },
-        ],
-      }),
-      visualizer(),
-    ];
+    plugins = [...plugins, visualizer()];
   }
 
   const build = {
