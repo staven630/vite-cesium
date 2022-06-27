@@ -1,23 +1,18 @@
-import { createRouter, createWebHistory } from "vue-router";
-
-const modules = import.meta.glob("../views/**/**.vue");
-
-const loadView = (name) => modules[/* @vite-ignore */ `../views${name}.vue`];
+import { createRouter, createWebHistory } from 'vue-router'
+import { loadView } from '@/utils/index'
 
 const routes = [
   {
-    path: "/",
-    component: loadView("/home/index"),
-  },
-  {
-    path: "/:pathMatch(.*)",
-    redirect: "/404",
-  },
-];
+    path: '/',
+    name: 'Home',
+    component: loadView('/home')
+  }
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  history: createWebHistory(),
+  routes
 });
 
 export default router;
+
